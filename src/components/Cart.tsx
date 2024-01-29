@@ -12,9 +12,10 @@ import { Separator } from "./ui/separator";
 import { formatPrice } from "@/lib/utils";
 import Link from "next/link";
 import { buttonVariants } from "./ui/button";
+import Image from "next/image";
 
 const Cart = () => {
-  const itemCount = 1;
+  const itemCount = 0;
   const fee = 1;
   return (
     <Sheet>
@@ -66,7 +67,28 @@ const Cart = () => {
             </div>
           </>
         ) : (
-          <div></div>
+          <div className="flex h-full flex-col justify-center items-center space-y-1">
+            <div
+              aria-hidden
+              className="relative mb-4 h-60 w-60 text-muted-foreground"
+            >
+              <Image src="/hippo-empty-cart.png" alt="empty cart" fill />
+            </div>
+            <div className="text-xl font-semibold">Your cart is empty</div>
+            <SheetTrigger asChild>
+              <Link
+                href="/products"
+                className={buttonVariants({
+                  variant: "link",
+                  size: "sm",
+                  className: "text-sm text-muted-foreground",
+                })}
+              >
+                {" "}
+                Add products to your cart to checkout
+              </Link>
+            </SheetTrigger>
+          </div>
         )}
       </SheetContent>
     </Sheet>
