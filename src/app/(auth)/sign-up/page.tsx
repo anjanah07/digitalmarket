@@ -10,14 +10,11 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import {
+	AuthCredentialsValidator,
+	TAuthCredentialsValidator,
+} from "@/lib/validators/account-credentials-validators";
 const Page = () => {
-	const AuthCredentialsValidator = z.object({
-		email: z.string().email(),
-		password: z
-			.string()
-			.min(8, { message: "Password must be at least 8 characters long" }),
-	});
-	type TAuthCredentialsValidator = z.infer<typeof AuthCredentialsValidator>;
 	const {
 		register,
 		handleSubmit,
@@ -25,6 +22,9 @@ const Page = () => {
 	} = useForm<TAuthCredentialsValidator>({
 		resolver: zodResolver(AuthCredentialsValidator),
 	});
+	const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
+		//send data to server
+	};
 	return (
 		<>
 			<div className="container relative flex pt-20 flex-col items-center justify-center lg:px-0">
@@ -44,19 +44,24 @@ const Page = () => {
 						</Link>
 					</div>
 					<div className="grid gap-6">
-						<form>
+						<form onSubmit={handleSubmit(onSubmit)}>
 							<div className="grid gap-2">
 								<div className="grip gap-1 py-2">
 									<Label htmlFor="email">Email</Label>
 									<Input
-										className={cn({ "focus-visible:ring-red-500": true })}
+										{...register("email")}
+										className={cn({
+											"focus-visible:ring-red-500": errors.email,
+										})}
 										placeholder="you@example.com"
 									/>
 								</div>
 								<div className="grip gap-1 py-2">
 									<Label htmlFor="password">Password</Label>
 									<Input
-										className={cn({ "focus-visible:ring-red-500": true })}
+										className={cn({
+											"focus-visible:ring-red-500": errors.password,
+										})}
 										placeholder="Password"
 									/>
 								</div>
